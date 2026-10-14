@@ -13,21 +13,27 @@ export default async function Profile() {
     redirect("/signin");
   }
 
-  const { data: profile, error } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (error) {
-    console.error(error);
+  if (profileError) {
+    console.error(profileError);
   }
-  console.log(profile);
+  const { data: countries, error: countriesError } = await supabase
+    .from("countries")
+    .select("country");
+
+  if (countriesError) {
+    console.error(countriesError);
+  }
 
   return (
     <>
       <h1>My Profile</h1>
-      <ProfileForm profile={profile} />
+      <ProfileForm profile={profile} email={user.email} countries={countries} />
     </>
   );
 }

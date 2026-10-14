@@ -7,7 +7,10 @@ import ProfileInfoForm from "./ProfileInfoForm";
 
 export default function Signup() {
   const [step, setStep] = useState(1);
-  const formData = useRef({});
+  const formData = useRef<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
   return (
     <div className="flex h-screen justify-center items-center">
       <div className="flex flex-col border border-primary-light   py-5 px-9 rounded-xl">

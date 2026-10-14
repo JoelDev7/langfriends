@@ -2,27 +2,44 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
+import { useEffect, useRef } from "react";
+import ShowSuggestions from "./ShowSuggestions";
 
 type Inputs = {
   username: string;
   full_name: string;
   avatar_url: string;
-  age: string;
+  date_of_birth: string;
   country: string;
   native_language: string;
   learning_language: string;
   practice_schedule: string;
-  mail: string;
+  email: string;
 };
 
-type Props = { profile: Inputs };
+type Props = {
+  profile: Inputs;
+  email: string | undefined;
+  countries: { country: any }[] | null;
+};
 
-export default function ProfileForm({ profile }: Props) {
+export default function ProfileForm({ profile, email, countries }: Props) {
+  const countriesArray = useRef<string[]>([]);
+  useEffect(() => {
+    if (countries) {
+      countriesArray.current = countries.map((country) => country.country);
+    }
+  }, []);
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
-  } = useForm<Inputs>({ mode: "onTouched", defaultValues: profile });
+  } = useForm<Inputs>({
+    mode: "onTouched",
+    defaultValues: { ...profile, email },
+  });
   const onSubmit: SubmitHandler<Inputs> = (data) => {};
   function insertProfile() {}
   return (
@@ -30,7 +47,7 @@ export default function ProfileForm({ profile }: Props) {
       <InputField
         fieldName="Full name"
         id="full_name"
-        rhf={register("full_name", { required: "Full name is required." })}
+        rhf={register("full_name")}
         rhfErrors={errors}
         type="text"
       />
@@ -44,19 +61,30 @@ export default function ProfileForm({ profile }: Props) {
       />
       {errors.username && <FieldError message={errors.username.message} />}
       <InputField
-        fieldName="Age"
+        fieldName="Date of birth"
         id="age"
-        rhf={register("age", { required: "Age is required." })}
+        rhf={register("date_of_birth", {
+          required: "Date of birth is required.",
+        })}
         rhfErrors={errors}
         type="text"
       />
-      {errors.age && <FieldError message={errors.age.message} />}
+      {errors.date_of_birth && (
+        <FieldError message={errors.date_of_birth.message} />
+      )}
       <InputField
         fieldName="Country"
-        id="age"
+        id="country"
         rhf={register("country", { required: "Country is required." })}
         rhfErrors={errors}
         type="text"
+      />
+      <ShowSuggestions
+        data={countriesArray.current}
+        query={watch("country")}
+        setValue={setValue}
+        field="country"
+        watch={watch("country")}
       />
       {errors.country && <FieldError message={errors.country.message} />}
       <InputField
@@ -86,9 +114,7 @@ export default function ProfileForm({ profile }: Props) {
       <InputField
         fieldName="Practice schedule"
         id="practice_schedule"
-        rhf={register("practice_schedule", {
-          required: "Practice schedule is required.",
-        })}
+        rhf={register("practice_schedule")}
         rhfErrors={errors}
         type="text"
       />
@@ -96,13 +122,14 @@ export default function ProfileForm({ profile }: Props) {
         <FieldError message={errors.practice_schedule.message} />
       )}
       <InputField
-        fieldName="Mail"
+        fieldName="
+        Email"
         id="mail"
-        rhf={register("mail", { required: "Mail is required." })}
+        rhf={register("email", { required: "Email is required." })}
         rhfErrors={errors}
         type="text"
       />
-      {errors.mail && <FieldError message={errors.mail.message} />}
+      {errors.email && <FieldError message={errors.email.message} />}
     </form>
   );
 }

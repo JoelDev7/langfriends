@@ -15,7 +15,7 @@ type Inputs = {
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
-  formData: RefObject<{}>;
+  formData: RefObject<{ email: string; password: string }>;
 };
 export default function EmailPasswordForm({ step, setStep, formData }: Props) {
   const [status, setStatus] = useState("");
@@ -27,9 +27,8 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (data.password === data.confirmPassword) {
       // signUpNewUser(data.email, data.password);
-      formData.current = {
-        credentials: { email: data.email, password: data.confirmPassword },
-      };
+      formData.current = { email: data.email, password: data.confirmPassword };
+
       setStep(2);
     } else {
       setStatus("mismatch");
@@ -71,8 +70,8 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
         rhf={register("password", {
           required: "Password is required",
           minLength: {
-            value: 6,
-            message: "Password must be at least 6 characters long",
+            value: 8,
+            message: "Password must be at least 8 characters long",
           },
         })}
         fieldName="Password"
@@ -85,8 +84,8 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
         rhf={register("confirmPassword", {
           required: "Password confirmation is required",
           minLength: {
-            value: 6,
-            message: "Password must be at least 6 characters long",
+            value: 8,
+            message: "Password must be at least 8 characters long",
           },
         })}
         fieldName="Confirm password"
@@ -98,7 +97,7 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
         <FieldError message={errors.confirmPassword.message} />
       )}
       <div className=" mt-4">
-        {status === "error" ? (
+        {/* {status === "error" ? (
           <FormError message="There was a problem, please try again later." />
         ) : null}
         {status === "success" ? (
@@ -107,7 +106,7 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
               Go to sign in
             </Link>
           </FormSuccess>
-        ) : null}
+        ) : null} */}
         {status === "mismatch" ? (
           <FormWarning message="Please check if your password matches and try again." />
         ) : null}
