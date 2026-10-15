@@ -1,12 +1,11 @@
-import { createClient } from "@/lib/supabase/client";
 import { Dispatch, RefObject, SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
 import FormWarning from "../_common/FormWarning";
-import FormSuccess from "../_common/FormSuccess";
-import FormError from "../_common/FormError";
 import Link from "next/link";
+import { EmailPassword, emailPasswordSchema } from "@/lib/validation/signup";
+import { zodResolver } from "@hookform/resolvers/zod";
 type Inputs = {
   email: string;
   password: string;
@@ -23,10 +22,12 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ mode: "onTouched" });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  } = useForm<EmailPassword>({
+    mode: "onTouched",
+    resolver: zodResolver(emailPasswordSchema),
+  });
+  const onSubmit: SubmitHandler<EmailPassword> = (data) => {
     if (data.password === data.confirmPassword) {
-      // signUpNewUser(data.email, data.password);
       formData.current = { email: data.email, password: data.confirmPassword };
 
       setStep(2);
@@ -34,46 +35,21 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
       setStatus("mismatch");
     }
   };
-
-  // const supabase = createClient();
-  // async function signUpNewUser(email: string, password: string) {
-  //   const { data, error } = await supabase.auth.signUp({
-  //     email: email,
-  //     password: password,
-  //   });
-  //   if (error) {
-  //     console.error(error);
-  //     setStatus("error");
-  //     return;
-  //   }
-  //   setStatus("success");
-  //   console.log("User:", data.user);
-  //   console.log("Session", data.session);
-  //   console.log("Data:", data);
-  // }
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={`${step === 1 ? "flex" : "hidden"}   flex-col max-w-50`}
     >
       <InputField
-        rhf={register("email", { required: "Email is required" })}
+        rhf={register("email")}
         fieldName="Email"
         id="email"
         type="text"
         rhfErrors={errors}
       />
-      {errors.email?.type === "required" && (
-        <FieldError message={errors.email.message} />
-      )}
+      {errors.email && <FieldError message={errors.email.message} />}
       <InputField
-        rhf={register("password", {
-          required: "Password is required",
-          minLength: {
-            value: 8,
-            message: "Password must be at least 8 characters long",
-          },
-        })}
+        rhf={register("password")}
         fieldName="Password"
         id="password"
         type="password"
@@ -81,13 +57,7 @@ export default function EmailPasswordForm({ step, setStep, formData }: Props) {
       />
       {errors.password && <FieldError message={errors.password.message} />}
       <InputField
-        rhf={register("confirmPassword", {
-          required: "Password confirmation is required",
-          minLength: {
-            value: 8,
-            message: "Password must be at least 8 characters long",
-          },
-        })}
+        rhf={register("confirmPassword")}
         fieldName="Confirm password"
         id="confirmPassword"
         type="password"

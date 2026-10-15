@@ -29,11 +29,23 @@ export default async function Profile() {
   if (countriesError) {
     console.error(countriesError);
   }
+  const { data: languages, error: languagesError } = await supabase
+    .from("languages")
+    .select("language");
+
+  if (languagesError) {
+    console.error(languagesError);
+  }
 
   return (
     <>
       <h1>My Profile</h1>
-      <ProfileForm profile={profile} email={user.email} countries={countries} />
+      <ProfileForm
+        profile={profile}
+        email={user.email}
+        countries={countries}
+        languages={languages}
+      />
     </>
   );
 }

@@ -21,13 +21,23 @@ type Props = {
   profile: Inputs;
   email: string | undefined;
   countries: { country: any }[] | null;
+  languages: { language: any }[] | null;
 };
 
-export default function ProfileForm({ profile, email, countries }: Props) {
+export default function ProfileForm({
+  profile,
+  email,
+  countries,
+  languages,
+}: Props) {
   const countriesArray = useRef<string[]>([]);
+  const languagesArray = useRef<string[]>([]);
   useEffect(() => {
     if (countries) {
       countriesArray.current = countries.map((country) => country.country);
+    }
+    if (languages) {
+      languagesArray.current = languages.map((language) => language.language);
     }
   }, []);
   const {
@@ -41,7 +51,6 @@ export default function ProfileForm({ profile, email, countries }: Props) {
     defaultValues: { ...profile, email },
   });
   const onSubmit: SubmitHandler<Inputs> = (data) => {};
-  function insertProfile() {}
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
       <InputField
@@ -96,6 +105,13 @@ export default function ProfileForm({ profile, email, countries }: Props) {
         rhfErrors={errors}
         type="text"
       />
+      <ShowSuggestions
+        data={languagesArray.current}
+        query={watch("native_language")}
+        setValue={setValue}
+        field="native_language"
+        watch={watch("native_language")}
+      />
       {errors.native_language && (
         <FieldError message={errors.native_language.message} />
       )}
@@ -107,6 +123,13 @@ export default function ProfileForm({ profile, email, countries }: Props) {
         })}
         rhfErrors={errors}
         type="text"
+      />
+      <ShowSuggestions
+        data={languagesArray.current}
+        query={watch("learning_language")}
+        setValue={setValue}
+        field="learning_language"
+        watch={watch("learning_language")}
       />
       {errors.learning_language && (
         <FieldError message={errors.learning_language.message} />

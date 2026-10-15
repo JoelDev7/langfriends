@@ -6,7 +6,12 @@ import { createClient } from "@/lib/supabase/client";
 import FormSuccess from "../_common/FormSuccess";
 import FormError from "../_common/FormError";
 import Link from "next/link";
-import { signUpSchema } from "@/lib/validation/signup";
+import {
+  ProfileInfo,
+  profileInfoSchema,
+  signUpSchema,
+} from "@/lib/validation/signup";
+import { zodResolver } from "@hookform/resolvers/zod";
 type Inputs = {
   username: string;
   country: string;
@@ -34,8 +39,11 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ mode: "onTouched" });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  } = useForm<ProfileInfo>({
+    mode: "onTouched",
+    resolver: zodResolver(profileInfoSchema),
+  });
+  const onSubmit: SubmitHandler<ProfileInfo> = (data) => {
     signUpNewUser({
       email: formData.current.email,
       password: formData.current.password,
@@ -107,9 +115,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         type="text"
         rhfErrors={errors}
       />
-      {errors.username?.type === "required" && (
-        <FieldError message={errors.username.message} />
-      )}
+      {errors.username && <FieldError message={errors.username.message} />}
       <InputField
         rhf={register("country", { required: "Country is required" })}
         fieldName="Country"
@@ -117,9 +123,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         type="text"
         rhfErrors={errors}
       />
-      {errors.country?.type === "required" && (
-        <FieldError message={errors.country.message} />
-      )}
+      {errors.country && <FieldError message={errors.country.message} />}
       <InputField
         rhf={register("native_language", {
           required: "Native language is required",
@@ -129,7 +133,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         type="text"
         rhfErrors={errors}
       />
-      {errors.native_language?.type === "required" && (
+      {errors.native_language && (
         <FieldError message={errors.native_language.message} />
       )}
       <InputField
@@ -141,7 +145,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         type="text"
         rhfErrors={errors}
       />
-      {errors.learning_language?.type === "required" && (
+      {errors.learning_language && (
         <FieldError message={errors.learning_language.message} />
       )}
       <InputField
@@ -154,7 +158,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         rhfErrors={errors}
       />
       Format: yyyy-mm-dd <br /> Example: 2000-09-02
-      {errors.date_of_birth?.type === "required" && (
+      {errors.date_of_birth && (
         <FieldError message={errors.date_of_birth.message} />
       )}
       <div className=" mt-4">
