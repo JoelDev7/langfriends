@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
 import { useEffect, useRef } from "react";
-import ShowSuggestions from "./ShowSuggestions";
+import ShowSuggestions from "../_common/ShowSuggestions";
 
 type Inputs = {
   username: string;
@@ -93,7 +93,6 @@ export default function ProfileForm({
         query={watch("country")}
         setValue={setValue}
         field="country"
-        watch={watch("country")}
       />
       {errors.country && <FieldError message={errors.country.message} />}
       <InputField
@@ -110,7 +109,6 @@ export default function ProfileForm({
         query={watch("native_language")}
         setValue={setValue}
         field="native_language"
-        watch={watch("native_language")}
       />
       {errors.native_language && (
         <FieldError message={errors.native_language.message} />
@@ -129,7 +127,6 @@ export default function ProfileForm({
         query={watch("learning_language")}
         setValue={setValue}
         field="learning_language"
-        watch={watch("learning_language")}
       />
       {errors.learning_language && (
         <FieldError message={errors.learning_language.message} />

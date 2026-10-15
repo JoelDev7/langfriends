@@ -1,7 +1,14 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
-import { Dispatch, RefObject, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createClient } from "@/lib/supabase/client";
 import FormSuccess from "../_common/FormSuccess";
 import FormError from "../_common/FormError";
@@ -9,35 +16,39 @@ import Link from "next/link";
 import {
   ProfileInfo,
   profileInfoSchema,
+  SignUpData,
   signUpSchema,
 } from "@/lib/validation/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
-type Inputs = {
-  username: string;
-  country: string;
-  native_language: string;
-  learning_language: string;
-  date_of_birth: string;
-};
+import ShowSuggestions from "../_common/ShowSuggestions";
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
   formData: RefObject<{ email: string; password: string }>;
 };
-type SignUpData = {
-  email: string;
-  password: string;
-  username: string;
-  date_of_birth: string;
-  country: string;
-  native_language: string;
-  learning_language: string;
-};
 export default function ProfileInfoForm({ step, setStep, formData }: Props) {
   const [status, setStatus] = useState("");
+  const countriesArray = useRef<string[]>([]);
+  const languagesArray = useRef<string[]>([]);
+  useEffect(() => {
+    getCountriesAndLanguages().then((response) => {
+      if (response.countries) {
+        countriesArray.current = response.countries.map(
+          (country) => country.country,
+        );
+      }
+      if (response.languages) {
+        languagesArray.current = response.languages.map(
+          (language) => language.language,
+        );
+      }
+    });
+  }, []);
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ProfileInfo>({
     mode: "onTouched",
@@ -55,6 +66,24 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
     });
   };
   const supabase = createClient();
+  async function getCountriesAndLanguages() {
+    const { data: countries, error: countriesError } = await supabase
+      .from("countries")
+      .select("country");
+
+    if (countriesError) {
+      console.error(countriesError);
+    }
+
+    const { data: languages, error: languagesError } = await supabase
+      .from("languages")
+      .select("language");
+
+    if (languagesError) {
+      console.error(languagesError);
+    }
+    return { countries, languages };
+  }
   async function signUpNewUser({
     email,
     password,
@@ -81,15 +110,15 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
       };
     }
     const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+      email: result.data.email,
+      password: result.data.password,
       options: {
         data: {
-          username,
-          country,
-          native_language,
-          learning_language,
-          date_of_birth,
+          username: result.data.username,
+          country: result.data.country,
+          native_language: result.data.native_language,
+          learning_language: result.data.learning_language,
+          date_of_birth: result.data.date_of_birth,
         },
       },
     });
@@ -109,7 +138,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
       className={`${step === 2 ? "flex" : "hidden"}   flex-col max-w-50`}
     >
       <InputField
-        rhf={register("username", { required: "Username is required" })}
+        rhf={register("username")}
         fieldName="Username"
         id="username"
         type="text"
@@ -117,41 +146,53 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
       />
       {errors.username && <FieldError message={errors.username.message} />}
       <InputField
-        rhf={register("country", { required: "Country is required" })}
+        rhf={register("country")}
         fieldName="Country"
         id="country"
         type="text"
         rhfErrors={errors}
       />
+      <ShowSuggestions
+        data={countriesArray.current}
+        field="country"
+        query={watch("country")}
+        setValue={setValue}
+      />
       {errors.country && <FieldError message={errors.country.message} />}
       <InputField
-        rhf={register("native_language", {
-          required: "Native language is required",
-        })}
+        rhf={register("native_language")}
         fieldName="Native language"
         id="native_language"
         type="text"
         rhfErrors={errors}
       />
+      <ShowSuggestions
+        data={languagesArray.current}
+        field="native_language"
+        query={watch("native_language")}
+        setValue={setValue}
+      />
       {errors.native_language && (
         <FieldError message={errors.native_language.message} />
       )}
       <InputField
-        rhf={register("learning_language", {
-          required: "Learning language is required",
-        })}
+        rhf={register("learning_language")}
         fieldName="Learning language"
         id="learning_language"
         type="text"
         rhfErrors={errors}
       />
+      <ShowSuggestions
+        data={languagesArray.current}
+        field="learning_language"
+        query={watch("learning_language")}
+        setValue={setValue}
+      />
       {errors.learning_language && (
         <FieldError message={errors.learning_language.message} />
       )}
       <InputField
-        rhf={register("date_of_birth", {
-          required: "Date of birth is required",
-        })}
+        rhf={register("date_of_birth")}
         fieldName="Date of birth"
         id="date_of_birth"
         type="text"

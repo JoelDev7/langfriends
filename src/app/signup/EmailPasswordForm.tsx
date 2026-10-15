@@ -6,11 +6,6 @@ import FormWarning from "../_common/FormWarning";
 import Link from "next/link";
 import { EmailPassword, emailPasswordSchema } from "@/lib/validation/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
-type Inputs = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
