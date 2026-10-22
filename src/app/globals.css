@@ -41,3 +41,27 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer utilities {
+  .popover-anim {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out,
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+
+  .popover-anim:popover-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  @starting-style {
+    .popover-anim:popover-open {
+      opacity: 0;
+      transform: translateY(8px) scale(0.95);
+    }
+  }
+}
