@@ -22,13 +22,13 @@ export default function ShowSuggestions({
       );
     });
   }
-  if (!showList && query !== results[0] && query?.length > 0) {
+  if (!showList && query !== results[0]) {
     setShowList(true);
   }
   return (
     <div className="relative">
       <ul
-        className={`${showList && query?.length > 0 ? "" : "hidden"}  bg-white absolute max-h-61 overflow-y-scroll w-full p-1`}
+        className={`${showList && query?.length > 0 && query !== results[0] ? "" : "hidden"}  bg-white absolute max-h-61 overflow-y-scroll w-full p-1`}
       >
         {results.map((result) => {
           return (
