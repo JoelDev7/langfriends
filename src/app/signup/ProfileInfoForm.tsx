@@ -21,6 +21,7 @@ import {
 } from "@/lib/validation/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ShowSuggestions from "../_common/ShowSuggestions";
+import FormButton from "../_common/FormButton";
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
@@ -214,9 +215,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
           </FormSuccess>
         ) : null}
       </div>
-      <button className="mt-4 bg-primary-light border border-primary-light rounded py-2 cursor-pointer hover:bg-emerald-50">
-        Sign up
-      </button>
+      <FormButton text="Sign up" />
     </form>
   );
 }

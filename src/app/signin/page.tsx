@@ -4,6 +4,7 @@ import { InputField } from "../_common/InputField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createClient } from "@/lib/supabase/client";
 import FieldError from "../_common/FieldError";
+import FormButton from "../_common/FormButton";
 type Inputs = {
   email: string;
   password: string;
@@ -27,7 +28,7 @@ export default function SignIn() {
       console.error("There was sign in error", error);
       return;
     }
-    window.location.href = "/dashboard";
+    window.location.href = "/profile";
     console.log("Signed in as:", data.user.email);
   }
   return (
@@ -75,9 +76,7 @@ export default function SignIn() {
           >
             Forgot password?
           </Link>
-          <button className="mt-4 bg-primary-light cursor-pointer rounded py-2">
-            Sign in
-          </button>
+          <FormButton text="Sign in" />
           <Link href={"/signup"} className="text-center text-gray-500 mt-4">
             New here? Sign up!
           </Link>

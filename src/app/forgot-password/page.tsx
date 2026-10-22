@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
+import FormButton from "../_common/FormButton";
 type Input = {
   email: string;
 };
@@ -46,9 +47,7 @@ export default function ForgotPassword() {
           {errors.email?.type === "required" && (
             <FieldError message={errors.email.message} />
           )}
-          <button className="mt-4 bg-primary-light cursor-pointer rounded py-2">
-            Send reset email
-          </button>
+          <FormButton text="Send reset email" />
         </form>
       </div>
     </div>
