@@ -16,13 +16,13 @@ export function InputField({
 }: Props) {
   return (
     <>
-      <label className="mt-4" htmlFor={id}>
+      <label className="mt-4 text-sm text-emerald-600" htmlFor={id}>
         {fieldName}
       </label>
       <input
         {...rhf}
         readOnly={readOnly}
-        className="border-gray-500 px-2 py-1 border rounded"
+        className="border-gray-500 px-2 py-1 border-b "
         id={id}
         type={type}
         aria-invalid={rhfErrors[id] ? "true" : "false"}

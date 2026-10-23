@@ -40,7 +40,6 @@ export default async function Profile() {
   return (
     <div className="flex flex-col h-dvh justify-center items-center">
       <div className="md:w-1/2 w-11/12 xl:w-1/3 border border-primary-light rounded-lg p-9">
-        <h1 className="text-center">My Profile</h1>
         <ProfileForm
           profile={profile}
           email={user.email}

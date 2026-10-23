@@ -10,6 +10,7 @@ import FormButton from "../_common/FormButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextField from "../_common/TextField";
 import Popover from "../_common/Popover";
+import FileUpload from "../_common/FileUpload";
 
 type Props = {
   profile: ProfileData;
@@ -109,6 +110,10 @@ export default function ProfileForm({
   return (
     <main>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        <h1 className="text-center">My Profile</h1>
+        <div className=" my-4">
+          <FileUpload />
+        </div>
         <TextField
           rhfErrors={errors}
           fieldName="Biography"
@@ -138,7 +143,9 @@ export default function ProfileForm({
           rhfErrors={errors}
           type="text"
         />
-        Format:yyyy-mm-dd <br /> Example 2000-09-02
+        <div className="text-sm">
+          Format:yyyy-mm-dd <br /> Example 2000-09-02
+        </div>
         {errors.date_of_birth && (
           <FieldError message={errors.date_of_birth.message} />
         )}
