@@ -109,8 +109,10 @@ export default function ProfileForm({
   }
   return (
     <main>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-        <h1 className="text-center">My Profile</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-col">
+        <h1 className="text-center text-emerald-600 font-bold text-2xl">
+          {profile.username}
+        </h1>
         <div className=" my-4">
           <FileUpload />
         </div>

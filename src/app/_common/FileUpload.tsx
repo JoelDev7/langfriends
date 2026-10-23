@@ -11,7 +11,7 @@ export default function FileUpload() {
     }
   }
   return (
-    <div className="flex justify-center items-center flex-col">
+    <div className="flex justify-center min-h-0 items-center flex-col">
       {imgUrl === "" ? null : (
         <div
           className={
