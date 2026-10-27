@@ -6,11 +6,13 @@ export async function POST(request:NextRequest){
         const body = await request.json();
         const {messages} = body;
         if (!messages) {
-            return NextResponse.json({messages:null,error:"the messages data is missing"},{status:400})
+            return NextResponse.json({messages:null,error:"the messages data is missing or has the wrong format"},{status:400})
         }
+        console.log(messages);
+        
         const newMessages = await chatbot(messages);
         if(newMessages.messages){
-            return NextResponse.json({messages:newMessages.messages,error:newMessages.error},{status:200})
+            return NextResponse.json(newMessages,{status:200})
         }else{
             return NextResponse.json({messages:newMessages.messages,error:newMessages.error},{status:500})
         }
