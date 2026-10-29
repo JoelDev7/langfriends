@@ -215,7 +215,7 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
           </FormSuccess>
         ) : null}
       </div>
-      <FormButton text="Sign up" />
+      <FormButton text="Sign up" styles="mt-4" />
     </form>
   );
 }

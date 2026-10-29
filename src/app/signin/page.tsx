@@ -76,7 +76,7 @@ export default function SignIn() {
           >
             Forgot password?
           </Link>
-          <FormButton text="Sign in" />
+          <FormButton text="Sign in" styles="mt-4" />
           <Link href={"/signup"} className="text-center text-gray-500 mt-4">
             New here? Sign up!
           </Link>

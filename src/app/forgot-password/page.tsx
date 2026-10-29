@@ -47,7 +47,7 @@ export default function ForgotPassword() {
           {errors.email?.type === "required" && (
             <FieldError message={errors.email.message} />
           )}
-          <FormButton text="Send reset email" />
+          <FormButton text="Send reset email" styles="mt-4" />
         </form>
       </div>
     </div>

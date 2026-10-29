@@ -9,6 +9,7 @@ import FieldError from "../_common/FieldError";
 import FormError from "../_common/FormError";
 import FormSuccess from "../_common/FormSuccess";
 import FormWarning from "../_common/FormWarning";
+import FormButton from "../_common/FormButton";
 type Inputs = {
   password: string;
   confirmPassword: string;
@@ -90,9 +91,7 @@ export default function resetPassword() {
               <FormWarning message="Please check if your password matches and try again." />
             ) : null}
           </div>
-          <button className="mt-4 bg-primary-light cursor-pointer rounded py-2">
-            Reset
-          </button>
+          <FormButton text="Reset" styles="mt-4" />
         </form>
       </div>
     </div>
