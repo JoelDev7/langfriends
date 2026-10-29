@@ -48,7 +48,8 @@ export default function LanguageChatbot() {
     addNewMessage(userMessage, "user");
   }
 
-  function getChatbotAnswer() {
+  function getChatbotAnswer(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (userMessage) {
       addUserMessageToMessages();
       askChatbot();
@@ -87,15 +88,15 @@ export default function LanguageChatbot() {
           );
         })}
       </ul>
-      <input
-        onChange={(e) => setUserMessage(e.target.value)}
-        value={userMessage}
-        className="border-gray-500 px-2 py-1 border-b "
-        type="text"
-      />
-      <button type="button" onClick={getChatbotAnswer}>
-        Send message
-      </button>
+      <form onSubmit={(e) => getChatbotAnswer(e)}>
+        <input
+          onChange={(e) => setUserMessage(e.target.value)}
+          value={userMessage}
+          className="border-gray-500 px-2 py-1 border-b "
+          type="text"
+        />
+        <button>Send message</button>
+      </form>
     </div>
   );
 }
