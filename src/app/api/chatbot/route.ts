@@ -6,15 +6,13 @@ export async function POST(request:NextRequest){
         const body = await request.json();
         const {messages} = body;
         if (!messages) {
-            return NextResponse.json({messages:null,error:"the messages data is missing or has the wrong format"},{status:400})
+            return NextResponse.json({messages:null,error:"the messages data is missing or has the wrong format."},{status:400})
         }
-        console.log(messages);
-        
-        const newMessages = await chatbot(messages);
-        if(newMessages.messages){
-            return NextResponse.json(newMessages,{status:200})
+        const chatbotResponse = await chatbot(messages);
+        if(chatbotResponse.messages){
+            return NextResponse.json(chatbotResponse,{status:200})
         }else{
-            return NextResponse.json({messages:newMessages.messages,error:newMessages.error},{status:500})
+            return NextResponse.json({messages:null,error:chatbotResponse.error},{status:500})
         }
 
     }catch(error){
@@ -42,6 +40,6 @@ async function chatbot(messages:[]){
     if (chatCompletion?.choices[0].message.content) {
         return{messages:chatCompletion.choices[0].message.content, error:null}
     }else{
-        return{messages:null,error:"There was a problem with the chatbot response"}
+        return{messages:null,error:"The chatbot returned no response for this conversation"}
     }
 }
