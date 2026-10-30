@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import FormButton from "./FormButton";
 
 export default function LanguageChatbot() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -66,7 +67,7 @@ export default function LanguageChatbot() {
           {
             role: "system",
             content:
-              "Be a helpful English native speaker that gives concise answers and only talks about English learning related topics. Anwer only user role messages.",
+              "Be a helpful English native speaker that gives concise and not long answers and helps users improve their English through conversation, examples and other teaching tools. Anwer only user role messages.",
           },
         ],
       });
@@ -76,26 +77,27 @@ export default function LanguageChatbot() {
     }
   }
   return (
-    <div className="flex flex-col">
-      <ul>
+    <div className="flex flex-col mx-2 w-full h-full py-2">
+      <ul className="">
         {messages.map((msg, i) => {
           return (
-            <li key={msg.content + i}>
-              <strong>{msg.role}:</strong>
-              <br />
+            <li
+              className={`${msg.role === "assistant" ? "bg-emerald-100" : "bg-blue-200"} rounded-xl p-2 ${msg.role === "assistant" ? "rounded-tl-none" : "rounded-tr-none "} ${msg.role == "assistant" ? "" : "text-right"} mb-2`}
+              key={msg.content + i}
+            >
               {msg.content}
             </li>
           );
         })}
       </ul>
-      <form onSubmit={(e) => getChatbotAnswer(e)}>
+      <form className="flex w-full" onSubmit={(e) => getChatbotAnswer(e)}>
         <input
           onChange={(e) => setUserMessage(e.target.value)}
           value={userMessage}
-          className="border-gray-500 px-2 py-1 border-b "
+          className="border-gray-500 px-2 border-b grow-[1]"
           type="text"
         />
-        <button>Send message</button>
+        <FormButton text="Send message" styles="px-2 " />
       </form>
     </div>
   );
