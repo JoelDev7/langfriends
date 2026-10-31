@@ -87,7 +87,7 @@ export default function LanguageChatbot() {
   }
   return (
     <div className="mx-2 w-full py-2 relative h-full">
-      <ul className="overflow-y-scroll h-full pb-11">
+      <ul className="overflow-y-scroll h-full pb-11 flex flex-col justify-end">
         {messages.map((msg, i) => {
           return (
             <li
