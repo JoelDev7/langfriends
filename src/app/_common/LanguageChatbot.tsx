@@ -91,7 +91,7 @@ export default function LanguageChatbot() {
         {messages.map((msg, i) => {
           return (
             <li
-              className={`${msg.role === "assistant" ? "bg-emerald-100" : "bg-blue-200"} rounded-xl p-2 ${msg.role === "assistant" ? "rounded-tl-none" : "rounded-tr-none "} ${msg.role == "assistant" ? "" : "text-right"} mb-2`}
+              className={`${msg.role === "assistant" ? "bg-emerald-100" : "bg-blue-200"} rounded-xl p-2 ${msg.role === "assistant" ? "rounded-tl-none" : "rounded-tr-none "} ${msg.role == "assistant" ? "" : "text-right"} ${msg.role === "assistant" ? "self-start" : "self-end"} mb-2 `}
               key={msg.content + i}
             >
               {msg.content}
