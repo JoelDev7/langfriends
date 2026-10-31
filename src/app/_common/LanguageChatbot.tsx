@@ -16,7 +16,7 @@ export default function LanguageChatbot() {
       return;
     }
     try {
-      const answerRequest = await fetch("http://localhost:3000/api/chatbot", {
+      const answerRequest = await fetch("/api/chatbot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
