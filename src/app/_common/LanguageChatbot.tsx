@@ -1,6 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import FormButton from "./FormButton";
+import Popover from "./Popover";
+
+type Popover = {
+  show: boolean;
+  message: string;
+  type: "success" | "error" | "info" | "";
+  durationMils: number;
+};
 
 export default function LanguageChatbot() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
@@ -9,11 +17,23 @@ export default function LanguageChatbot() {
 
   const [userMessage, setUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [popover, setPopover] = useState<Popover>({
+    show: false,
+    message: "",
+    type: "",
+    durationMils: 0,
+  });
 
   async function askChatbot() {
     const requestBody = messagesToJsonString();
     if (!requestBody) {
-      console.log("Unable to convert messages");
+      console.log("Messages array is empty or has the wrong format.");
+      setPopover({
+        durationMils: 4500,
+        message: "There are no messages or they have the wrong format",
+        show: true,
+        type: "error",
+      });
       return;
     }
     try {
@@ -26,9 +46,15 @@ export default function LanguageChatbot() {
       });
       if (!answerRequest.ok) {
         console.error(
-          "There was a problem with the request",
+          "There was a problem with chatbot's api response check errors and internet connection.",
           answerRequest.status,
         );
+        setPopover({
+          durationMils: 4500,
+          message: "Please check your internet connection and try again",
+          show: true,
+          type: "error",
+        });
       }
       const answerResponse = await answerRequest.json();
       if (answerResponse.messages) {
@@ -82,6 +108,12 @@ export default function LanguageChatbot() {
       });
     } catch (error) {
       console.log("Unable to convert current messages to json.");
+      setPopover({
+        durationMils: 4500,
+        message: "There was a problem preparing messages for the chatbot.",
+        show: true,
+        type: "error",
+      });
       return null;
     }
   }
@@ -115,6 +147,20 @@ export default function LanguageChatbot() {
         />
         <FormButton text="Send message" styles="px-2 " />
       </form>
+      <Popover
+        onClose={() =>
+          setPopover({
+            message: "",
+            show: false,
+            type: "",
+            durationMils: 0,
+          })
+        }
+        durationMils={popover.durationMils}
+        message={popover.message}
+        showPopover={popover.show}
+        type={popover.type}
+      />
     </div>
   );
 }
