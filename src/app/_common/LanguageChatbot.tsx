@@ -77,8 +77,8 @@ export default function LanguageChatbot() {
     }
   }
   return (
-    <div className="flex flex-col mx-2 w-full h-full py-2">
-      <ul className="">
+    <div className="mx-2 w-full h-full py-2">
+      <ul className="mb-16">
         {messages.map((msg, i) => {
           return (
             <li
@@ -90,15 +90,17 @@ export default function LanguageChatbot() {
           );
         })}
       </ul>
-      <form className="flex w-full" onSubmit={(e) => getChatbotAnswer(e)}>
-        <input
-          onChange={(e) => setUserMessage(e.target.value)}
-          value={userMessage}
-          className="border-gray-500 px-2 border-b grow-[1]"
-          type="text"
-        />
-        <FormButton text="Send message" styles="px-2 " />
-      </form>
+      <div className="fixed w-full bottom-2 bg-white rounded p-2">
+        <form className="flex w-full" onSubmit={(e) => getChatbotAnswer(e)}>
+          <input
+            onChange={(e) => setUserMessage(e.target.value)}
+            value={userMessage}
+            className="border-gray-500 px-2 border-b grow"
+            type="text"
+          />
+          <FormButton text="Send message" styles="px-2 " />
+        </form>
+      </div>
     </div>
   );
 }
