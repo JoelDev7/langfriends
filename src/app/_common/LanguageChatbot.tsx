@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FormButton from "./FormButton";
 
 export default function LanguageChatbot() {
@@ -8,6 +8,7 @@ export default function LanguageChatbot() {
   );
 
   const [userMessage, setUserMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   async function askChatbot() {
     const requestBody = messagesToJsonString();
@@ -58,6 +59,14 @@ export default function LanguageChatbot() {
     }
   }
 
+  function showLatestMessages() {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  useEffect(() => {
+    showLatestMessages();
+  }, [messages]);
+
   function messagesToJsonString() {
     try {
       return JSON.stringify({
@@ -77,8 +86,8 @@ export default function LanguageChatbot() {
     }
   }
   return (
-    <div className="mx-2 w-full h-full py-2">
-      <ul className="mb-16">
+    <div className="mx-2 w-full py-2 relative h-full">
+      <ul className="overflow-y-scroll h-full pb-11">
         {messages.map((msg, i) => {
           return (
             <li
@@ -89,18 +98,23 @@ export default function LanguageChatbot() {
             </li>
           );
         })}
+        <div ref={messagesEndRef} />
       </ul>
-      <div className="fixed w-full bottom-2 bg-white rounded p-2">
-        <form className="flex w-full" onSubmit={(e) => getChatbotAnswer(e)}>
-          <input
-            onChange={(e) => setUserMessage(e.target.value)}
-            value={userMessage}
-            className="border-gray-500 px-2 border-b grow"
-            type="text"
-          />
-          <FormButton text="Send message" styles="px-2 " />
-        </form>
-      </div>
+      <form
+        className="flex w-full absolute bottom-0 bg-white p-1 rounded"
+        onSubmit={(e) => getChatbotAnswer(e)}
+      >
+        <input
+          name="chatInput"
+          aria-label="
+            Chat Input"
+          onChange={(e) => setUserMessage(e.target.value)}
+          value={userMessage}
+          className="border-gray-500 px-2 border-b grow"
+          type="text"
+        />
+        <FormButton text="Send message" styles="px-2 " />
+      </form>
     </div>
   );
 }
