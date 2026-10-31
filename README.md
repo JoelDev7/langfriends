@@ -1,6 +1,6 @@
 This is a language exchange platform Build with Nextjs, Supabase, Tailwind CSS and Groq API.
 
-##Setup (chatbot)
+## Setup (chatbot)
 
 1. Download the repository.
 2. Create an account in [Groq] (https://groq.com).
