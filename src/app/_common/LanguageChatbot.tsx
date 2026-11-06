@@ -15,6 +15,38 @@ export default function LanguageChatbot() {
     [],
   );
 
+  function saveToLocalStorage(key: string, value: any) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (error) {
+      console.error("LocalStorage write failed:", error);
+      return false;
+    }
+  }
+
+  function getFromLocalStorage(key: string) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : null;
+    } catch (error) {
+      console.error("LocalStorage read failed:", error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    const localSMessages = getFromLocalStorage("messages");
+    if (localSMessages) {
+      setMessages(localSMessages);
+    }
+  }, []);
+  useEffect(() => {
+    if (messages.length > 0) {
+      saveToLocalStorage("messages", messages);
+    }
+  }, [messages]);
+
   const [userMessage, setUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [popover, setPopover] = useState<Popover>({
@@ -62,6 +94,12 @@ export default function LanguageChatbot() {
       }
     } catch (error) {
       console.error("Unable to complete chatbot request", error);
+      setPopover({
+        durationMils: 4500,
+        message: "Unable to complete chatbot request",
+        show: true,
+        type: "error",
+      });
     }
   }
 
@@ -118,8 +156,8 @@ export default function LanguageChatbot() {
     }
   }
   return (
-    <div className="mx-2 w-full py-2 relative h-full">
-      <ul className="overflow-y-scroll h-full pb-11 flex flex-col justify-end">
+    <div className="mx-2 w-full h-full py-2 relative flex flex-col min-h-0">
+      <ul className="pb-11 flex flex-col flex-1 min-h-0 overflow-y-auto">
         {messages.map((msg, i) => {
           return (
             <li
