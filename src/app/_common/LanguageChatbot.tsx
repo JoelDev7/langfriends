@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import FormButton from "./FormButton";
 import Popover from "./Popover";
+import { useElementOnScreen } from "./useElementOnScreen";
+import ScrollToBottomButton from "./ScrollToBottomButton";
 
 type Popover = {
   show: boolean;
@@ -140,7 +142,7 @@ export default function LanguageChatbot() {
           {
             role: "system",
             content:
-              "Be a helpful English native speaker that gives concise and not long answers and helps users improve their English through conversation, examples and other teaching tools. Anwer only user role messages.",
+              "Be a helpful English native speaker that gives concise and not long answers (no more than 3 sentences) and helps users improve their English through conversation, examples and other teaching tools. Anwer only user role messages.",
           },
         ],
       });
@@ -155,6 +157,11 @@ export default function LanguageChatbot() {
       return null;
     }
   }
+  const [containerRef, isVisible] = useElementOnScreen({
+    root: null,
+    rootMargin: "0px",
+    threshold: 0,
+  });
   return (
     <div className="mx-2 w-full h-full py-2 relative flex flex-col min-h-0">
       <ul className="pb-11 flex flex-col flex-1 min-h-0 overflow-y-auto">
@@ -169,6 +176,10 @@ export default function LanguageChatbot() {
           );
         })}
         <div ref={messagesEndRef} />
+        <div ref={containerRef} />
+        {!isVisible ? (
+          <ScrollToBottomButton click={showLatestMessages} />
+        ) : null}
       </ul>
       <form
         className="flex w-full absolute bottom-0 bg-white p-1 rounded"
