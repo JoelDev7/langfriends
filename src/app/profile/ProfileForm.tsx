@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextField from "../_common/TextField";
 import Popover from "../_common/Popover";
 import FileUpload from "../_common/FileUpload";
+import InputWSuggestions from "../_common/InputWSuggestions";
 
 type Props = {
   profile: ProfileData;
@@ -113,9 +114,9 @@ export default function ProfileForm({
         <h1 className="text-center text-emerald-600 font-bold text-2xl">
           {profile.username}
         </h1>
-        <div className=" my-4">
+        {/* <div className=" my-4">
           <FileUpload />
-        </div>
+        </div> */}
         <TextField
           rhfErrors={errors}
           fieldName="Biography"
@@ -151,48 +152,30 @@ export default function ProfileForm({
         {errors.date_of_birth && (
           <FieldError message={errors.date_of_birth.message} />
         )}
-        <InputField
+        <InputWSuggestions
           fieldName="Country"
           id="country"
           rhf={register("country")}
           rhfErrors={errors}
-          type="text"
-        />
-        <ShowSuggestions
           data={countriesArray.current}
-          query={watch("country")}
-          setValue={setValue}
-          field="country"
         />
         {errors.country && <FieldError message={errors.country.message} />}
-        <InputField
+        <InputWSuggestions
           fieldName="Native language"
           id="native_language"
           rhf={register("native_language")}
           rhfErrors={errors}
-          type="text"
-        />
-        <ShowSuggestions
-          data={languagesArray.current}
-          query={watch("native_language")}
-          setValue={setValue}
-          field="native_language"
+          data={countriesArray.current}
         />
         {errors.native_language && (
           <FieldError message={errors.native_language.message} />
         )}
-        <InputField
+        <InputWSuggestions
           fieldName="Learning language"
           id="learning_language"
           rhf={register("learning_language")}
           rhfErrors={errors}
-          type="text"
-        />
-        <ShowSuggestions
-          data={languagesArray.current}
-          query={watch("learning_language")}
-          setValue={setValue}
-          field="learning_language"
+          data={countriesArray.current}
         />
         {errors.learning_language && (
           <FieldError message={errors.learning_language.message} />

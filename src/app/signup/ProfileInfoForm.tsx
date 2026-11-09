@@ -22,6 +22,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import ShowSuggestions from "../_common/ShowSuggestions";
 import FormButton from "../_common/FormButton";
+import InputWSuggestions from "../_common/InputWSuggestions";
 type Props = {
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
@@ -146,48 +147,30 @@ export default function ProfileInfoForm({ step, setStep, formData }: Props) {
         rhfErrors={errors}
       />
       {errors.username && <FieldError message={errors.username.message} />}
-      <InputField
-        rhf={register("country")}
+      <InputWSuggestions
+        data={countriesArray.current}
         fieldName="Country"
         id="country"
-        type="text"
+        rhf={register("country")}
         rhfErrors={errors}
       />
-      <ShowSuggestions
-        data={countriesArray.current}
-        field="country"
-        query={watch("country")}
-        setValue={setValue}
-      />
       {errors.country && <FieldError message={errors.country.message} />}
-      <InputField
+      <InputWSuggestions
         rhf={register("native_language")}
         fieldName="Native language"
         id="native_language"
-        type="text"
         rhfErrors={errors}
-      />
-      <ShowSuggestions
         data={languagesArray.current}
-        field="native_language"
-        query={watch("native_language")}
-        setValue={setValue}
       />
       {errors.native_language && (
         <FieldError message={errors.native_language.message} />
       )}
-      <InputField
+      <InputWSuggestions
         rhf={register("learning_language")}
         fieldName="Learning language"
         id="learning_language"
-        type="text"
         rhfErrors={errors}
-      />
-      <ShowSuggestions
         data={languagesArray.current}
-        field="learning_language"
-        query={watch("learning_language")}
-        setValue={setValue}
       />
       {errors.learning_language && (
         <FieldError message={errors.learning_language.message} />
