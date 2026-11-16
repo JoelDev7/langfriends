@@ -9,7 +9,8 @@ export const profileDataSchema = z.object({
   email:z.email().optional()
     , practice_schedule:z.string().nullable().or(z.literal(""))
     , full_name:z.string().nullable().or(z.literal(""))
-    , biography:z.string().trim()
+    , biography:z.string().trim(),
+    avatar_url:z.string()
 }) 
 
 export type ProfileData = z.infer<typeof profileDataSchema>
