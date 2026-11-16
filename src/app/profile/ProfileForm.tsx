@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { InputField } from "../_common/InputField";
 import FieldError from "../_common/FieldError";
 import { useEffect, useRef, useState } from "react";
-import ShowSuggestions from "../_common/ShowSuggestions";
 import { ProfileData, profileDataSchema } from "@/lib/validation/profile";
 import { createClient } from "@/lib/supabase/client";
 import FormButton from "../_common/FormButton";
@@ -52,8 +51,6 @@ export default function ProfileForm({
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<ProfileData>({
     mode: "onTouched",
@@ -114,9 +111,9 @@ export default function ProfileForm({
         <h1 className="text-center text-emerald-600 font-bold text-2xl">
           {profile.username}
         </h1>
-        {/* <div className=" my-4">
-          <FileUpload />
-        </div> */}
+        <div className=" my-4">
+          <FileUpload avatarImg={profile.avatar_url} />
+        </div>
         <TextField
           rhfErrors={errors}
           fieldName="Biography"
