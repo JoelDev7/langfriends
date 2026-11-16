@@ -4,6 +4,7 @@ import FormButton from "./FormButton";
 import Popover from "./Popover";
 import { useElementOnScreen } from "./useElementOnScreen";
 import ScrollToBottomButton from "./ScrollToBottomButton";
+import { getFromLocalStorage, saveToLocalStorage } from "@/utils/localStorage";
 
 type Popover = {
   show: boolean;
@@ -16,26 +17,6 @@ export default function LanguageChatbot() {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     [],
   );
-
-  function saveToLocalStorage(key: string, value: any) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-      return true;
-    } catch (error) {
-      console.error("LocalStorage write failed:", error);
-      return false;
-    }
-  }
-
-  function getFromLocalStorage(key: string) {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
-    } catch (error) {
-      console.error("LocalStorage read failed:", error);
-      return null;
-    }
-  }
 
   useEffect(() => {
     const localSMessages = getFromLocalStorage("messages");
