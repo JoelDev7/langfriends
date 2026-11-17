@@ -144,26 +144,29 @@ export default function LanguageChatbot() {
     threshold: 0,
   });
   return (
-    <div className="mx-2 w-full h-full py-2 relative flex flex-col min-h-0">
-      <ul className="pb-11 flex flex-col flex-1 min-h-0 overflow-y-auto">
+    <div className="mx-2 w-full h-full py-2 relative justify-end flex overflow-hidden flex-col">
+      <ul
+        className="
+       flex flex-col overflow-y-auto w-full pb-2"
+      >
         {messages.map((msg, i) => {
           return (
             <li
-              className={`${msg.role === "assistant" ? "bg-emerald-100" : "bg-blue-200"} rounded-xl p-2 ${msg.role === "assistant" ? "rounded-tl-none" : "rounded-tr-none "} ${msg.role == "assistant" ? "" : "text-right"} ${msg.role === "assistant" ? "self-start" : "self-end"} mb-2 `}
+              className={`${msg.role === "assistant" ? "bg-emerald-100" : "bg-blue-200"} rounded-xl p-2 ${msg.role === "assistant" ? "rounded-tl-none" : "rounded-tr-none "} ${msg.role == "assistant" ? "" : "text-right"} ${msg.role === "assistant" ? "self-start" : "self-end"} mb-2`}
               key={msg.content + i}
             >
               {msg.content}
             </li>
           );
         })}
-        <div ref={messagesEndRef} />
         <div ref={containerRef} />
+        <div ref={messagesEndRef} />
         {!isVisible ? (
           <ScrollToBottomButton click={showLatestMessages} />
         ) : null}
       </ul>
       <form
-        className="flex w-full absolute bottom-0 bg-white p-1 rounded"
+        className="flex w-full bg-white p-1 rounded"
         onSubmit={(e) => getChatbotAnswer(e)}
       >
         <input
