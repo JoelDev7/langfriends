@@ -27,6 +27,8 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
+
+  --spacing-content: calc(100% - 72px);
 }
 
 @media (prefers-color-scheme: dark) {

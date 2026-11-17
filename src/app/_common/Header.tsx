@@ -31,7 +31,7 @@ export default async function Header() {
           })}
         </ul>
         <a href="/profile">
-          <div className="relative size-8 rounded-full overflow-hidden">
+          <div className="relative size-10 rounded-full overflow-hidden">
             <Image
               src={data.avatar_url}
               fill
