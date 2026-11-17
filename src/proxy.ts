@@ -1,9 +1,42 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+ const { supabaseResponse, user } = await updateSession(request)
+  const pathname = request.nextUrl.pathname
+
+  const redirectWithCookies = (destination: string) => {
+    const url = request.nextUrl.clone()
+    url.pathname = destination
+    const redirectResponse = NextResponse.redirect(url)
+
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value)
+    })
+
+    return redirectResponse
+  }
+
+   const protectedRoutes = ["/", '/profile']
+  const authRoutes = ['/signin', '/signup']
+
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  )
+  const isAuthRoute = authRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  )
+  if (!user && isProtectedRoute) {
+    return redirectWithCookies('/signin')
+  }
+
+  if (user && isAuthRoute) {
+    return redirectWithCookies('/')
+  }
+
+  return supabaseResponse
 }
+
 
 export const config = {
   matcher: [

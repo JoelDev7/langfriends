@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import ProfileForm from "./ProfileForm";
 
 export default async function Profile() {
@@ -9,14 +8,10 @@ export default async function Profile() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/signin");
-  }
-
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", user?.id)
     .maybeSingle();
 
   if (profileError) {
@@ -42,7 +37,7 @@ export default async function Profile() {
       <div className="md:w-1/2 w-11/12 xl:w-1/3 border border-primary-light rounded-lg p-9 m-9">
         <ProfileForm
           profile={profile}
-          email={user.email}
+          email={user?.email}
           countries={countries}
           languages={languages}
         />
