@@ -33,9 +33,9 @@ export default async function Header() {
         <a href="/profile">
           <div className="relative size-10 rounded-full overflow-hidden">
             <Image
-              src={data.avatar_url}
+              src={data?.avatar_url}
               fill
-              alt={data.full_name + "'s picture"}
+              alt={data?.full_name + "'s picture"}
             />
           </div>
         </a>
