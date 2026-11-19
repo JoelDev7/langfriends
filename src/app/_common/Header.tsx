@@ -35,7 +35,7 @@ export default async function Header() {
             <Image
               src={data?.avatar_url}
               fill
-              alt={data?.full_name + "'s picture"}
+              alt={data?.full_name + "'s picture."}
             />
           </div>
         </a>
