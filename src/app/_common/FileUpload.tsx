@@ -28,6 +28,7 @@ export default function FileUpload({ avatarImg }: Props) {
             profilePhotoName,
           );
           setImgUrl(imageUrl);
+          window.location.reload();
         }
       } catch (err) {
         console.error("Upload failed:", err);

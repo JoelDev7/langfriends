@@ -59,6 +59,7 @@ export default function ProfileForm({
   });
   const onSubmit: SubmitHandler<ProfileData> = async (data) => {
     await updateProfile(data);
+    window.location.reload();
   };
   async function updateProfile(data: ProfileData) {
     const { email, ...profileUpdates } = data;
