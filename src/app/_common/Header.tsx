@@ -1,5 +1,5 @@
 "use client";
-import { useProfile } from "@/contexts/ProfileContext";
+import { useProfile } from "@/hooks/useProfile";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 

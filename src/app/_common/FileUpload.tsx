@@ -1,4 +1,4 @@
-import { useProfile } from "@/contexts/ProfileContext";
+import { useProfile } from "@/hooks/useProfile";
 import { uploadOrReplaceNormalizedToSupabase } from "@/lib/Images/imageNormalization";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";

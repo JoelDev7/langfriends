@@ -4,7 +4,6 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useContext,
   useState,
 } from "react";
 
@@ -15,7 +14,7 @@ interface ProfileContextType {
   setProfile: Dispatch<SetStateAction<Profile>>;
 }
 
-const ProfileContext = createContext<ProfileContextType | null>(null);
+export const ProfileContext = createContext<ProfileContextType | null>(null);
 
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile>({
@@ -26,14 +25,4 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   return (
     <ProfileContext value={{ profile, setProfile }}>{children}</ProfileContext>
   );
-}
-
-export function useProfile() {
-  const context = useContext(ProfileContext);
-
-  if (!context) {
-    throw new Error("use Profile must be used within a  Profile Provider");
-  }
-
-  return context;
 }
