@@ -1,4 +1,5 @@
 "use client";
+import { useProfile } from "@/contexts/ProfileContext";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
@@ -6,11 +7,10 @@ type navLink = {
   text: string;
   link: string;
 };
-
 type Props = {
-  data: any;
+  profileProp: any;
 };
-export default function Header({ data }: Props) {
+export default function Header({ profileProp }: Props) {
   const navLinks: navLink[] = [{ link: "/", text: "Home" }];
   const pathname = usePathname();
   const pathsToNotRender = [
@@ -22,6 +22,7 @@ export default function Header({ data }: Props) {
   const renderHeader = !pathsToNotRender.some((path) =>
     pathname.startsWith(path),
   );
+  const { profile } = useProfile();
   if (renderHeader) {
     return (
       <header>
@@ -40,9 +41,17 @@ export default function Header({ data }: Props) {
           <a href="/profile">
             <div className="relative size-10 rounded-full overflow-hidden">
               <Image
-                src={data?.avatar_url}
+                src={
+                  profile?.avatar_url
+                    ? profile.avatar_url
+                    : profileProp.avatar_url
+                }
                 fill
-                alt={data?.full_name + "'s picture."}
+                alt={
+                  profile?.full_name
+                    ? profile.full_name
+                    : profileProp.full_name + "'s profile picture"
+                }
               />
             </div>
           </a>
