@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./_common/Header";
 import { createClient } from "@/lib/supabase/server";
+import { ProfileProvider } from "@/contexts/ProfileContext";
+import { PopoverProvider } from "@/contexts/PopoverContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,8 +37,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="w-full h-full">
-        <Header data={data} />
-        {children}
+        <ProfileProvider>
+          <PopoverProvider>
+            <Header profileProp={data} />
+            {children}
+          </PopoverProvider>
+        </ProfileProvider>
       </body>
     </html>
   );
