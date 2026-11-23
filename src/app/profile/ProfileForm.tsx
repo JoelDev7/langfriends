@@ -11,19 +11,13 @@ import TextField from "../_common/TextField";
 import Popover from "../_common/Popover";
 import FileUpload from "../_common/FileUpload";
 import InputWSuggestions from "../_common/InputWSuggestions";
+import { usePopover } from "@/hooks/usePopover";
 
 type Props = {
   profile: ProfileData;
   email: string | undefined;
   countries: { country: any }[] | null;
   languages: { language: any }[] | null;
-};
-
-type Popover = {
-  show: boolean;
-  message: string;
-  type: "success" | "error" | "info" | "";
-  durationMils: number;
 };
 
 export default function ProfileForm({
@@ -34,12 +28,6 @@ export default function ProfileForm({
 }: Props) {
   const countriesArray = useRef<string[]>([]);
   const languagesArray = useRef<string[]>([]);
-  const [popover, setPopover] = useState<Popover>({
-    show: false,
-    message: "",
-    type: "",
-    durationMils: 0,
-  });
   useEffect(() => {
     if (countries) {
       countriesArray.current = countries.map((country) => country.country);
@@ -59,7 +47,6 @@ export default function ProfileForm({
   });
   const onSubmit: SubmitHandler<ProfileData> = async (data) => {
     await updateProfile(data);
-    window.location.reload();
   };
   async function updateProfile(data: ProfileData) {
     const { email, ...profileUpdates } = data;
@@ -70,13 +57,11 @@ export default function ProfileForm({
         error: authError,
       } = await supabase.auth.getUser();
       if (authError || !currentUser) {
-        setPopover({
-          durationMils: 4500,
-          message:
-            "Your session may have expired or there was a network issue, please try again",
-          show: true,
-          type: "error",
-        });
+        triggerPopover(
+          "Your session may have expired or there was a network issue, please try again",
+          "error",
+          3500,
+        );
         return { data: null, error: authError ?? new Error("Unauthenticated") };
       }
       const { data: updatedProfile, error } = await supabase
@@ -86,26 +71,17 @@ export default function ProfileForm({
         .select()
         .single();
       if (error) {
-        setPopover({
-          durationMils: 3500,
-          message: "There was a problem saving changes",
-          show: true,
-          type: "error",
-        });
+        triggerPopover("There was a problem saving changes", "error", 3500);
         return { data: null, error };
       } else {
-        setPopover({
-          message: "Profile updated successfully",
-          durationMils: 3000,
-          show: true,
-          type: "success",
-        });
+        triggerPopover("Profile updated successfully", "success", 3500);
         return { data: updatedProfile, error: null };
       }
     } catch (error) {
       console.log("Unexpected profile update error:", error);
     }
   }
+  const { triggerPopover } = usePopover();
   return (
     <main>
       <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-col">
@@ -113,7 +89,10 @@ export default function ProfileForm({
           {profile?.username}
         </h1>
         <div className=" my-4">
-          <FileUpload avatarImg={profile?.avatar_url} />
+          <FileUpload
+            avatarImg={profile?.avatar_url}
+            full_name={profile?.full_name ?? ""}
+          />
         </div>
         <TextField
           rhfErrors={errors}
@@ -200,20 +179,6 @@ export default function ProfileForm({
         {errors.email && <FieldError message={errors.email.message} />}
         <FormButton text="Save changes" />
       </form>
-      <Popover
-        onClose={() =>
-          setPopover({
-            message: "",
-            show: false,
-            type: "",
-            durationMils: 0,
-          })
-        }
-        durationMils={popover.durationMils}
-        message={popover.message}
-        showPopover={popover.show}
-        type={popover.type}
-      />
     </main>
   );
 }
