@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import FormButton from "./FormButton";
 import Popover from "./Popover";
-import { useElementOnScreen } from "./useElementOnScreen";
+import { useElementOnScreen } from "../../hooks/useElementOnScreen";
 import ScrollToBottomButton from "./ScrollToBottomButton";
 import { getFromLocalStorage, saveToLocalStorage } from "@/utils/localStorage";
 
