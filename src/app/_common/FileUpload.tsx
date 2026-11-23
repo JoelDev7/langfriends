@@ -1,13 +1,18 @@
+import { useProfile } from "@/contexts/ProfileContext";
 import { uploadOrReplaceNormalizedToSupabase } from "@/lib/Images/imageNormalization";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
+import Popover from "./Popover";
+import { usePopover } from "@/hooks/usePopover";
 
 type Props = {
   avatarImg: string;
+  full_name: string;
 };
 
-export default function FileUpload({ avatarImg }: Props) {
+export default function FileUpload({ avatarImg, full_name }: Props) {
   const [imgUrl, setImgUrl] = useState(avatarImg);
+  const { setProfile } = useProfile();
   async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
       const file = e.target.files[0];
@@ -19,6 +24,12 @@ export default function FileUpload({ avatarImg }: Props) {
             "avatars",
           );
           setImgUrl(imageUrl);
+          setProfile({ avatar_url: imageUrl, full_name });
+          triggerPopover(
+            "Profile photo updated successfully!",
+            "success",
+            3500,
+          );
         } else {
           const profilePhotoName =
             imgUrl.split("/")[imgUrl.split("/").length - 1];
@@ -28,13 +39,19 @@ export default function FileUpload({ avatarImg }: Props) {
             profilePhotoName,
           );
           setImgUrl(imageUrl);
-          window.location.reload();
+          setProfile({ avatar_url: imageUrl, full_name });
+          triggerPopover(
+            "Profile photo updated successfully!",
+            "success",
+            3500,
+          );
         }
       } catch (err) {
         console.error("Upload failed:", err);
       }
     }
   }
+  const { triggerPopover } = usePopover();
   return (
     <div className="flex justify-center min-h-0 items-center flex-col">
       <div
